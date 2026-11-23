@@ -5,17 +5,17 @@ Sistema de pedidos de comida. Trabajo Práctico Integrador de **Programación 4*
 Los clientes se registran, recorren el catálogo, arman un carrito y confirman un pedido indicando la dirección de entrega y la forma de pago (efectivo o transferencia). El negocio administra categorías, productos, stock, pedidos y usuarios desde un panel de administración.
 
 - **Alumno:** Abel Tomás Romero
-- **Repositorio:** 
+- **Repositorio:** https://github.com/AtomuDev/TPI-ProgramacionIV-FoodStore
 - **Video de demostración:** 
 
 ## Tecnologías
 
-| | Backend | Frontend |
-|---|---|---|
-| Lenguaje | Python 3.11 a 3.13 | TypeScript 5.9 (strict) |
-| Framework | FastAPI + SQLModel | React 19 + Vite 7 + Tailwind CSS 4 |
-| Datos | PostgreSQL 15+ (SQLite opcional en desarrollo) | TanStack Query, Form y Table; Zustand; Axios |
-| Seguridad | JWT en cookie HttpOnly, bcrypt, roles | React Router 7 con rutas protegidas por rol |
+|           | Backend                                        | Frontend                                     |
+| --------- | ---------------------------------------------- | -------------------------------------------- |
+| Lenguaje  | Python 3.11 a 3.13                             | TypeScript 5.9 (strict)                      |
+| Framework | FastAPI + SQLModel                             | React 19 + Vite 7 + Tailwind CSS 4           |
+| Datos     | PostgreSQL 15+ (SQLite opcional en desarrollo) | TanStack Query, Form y Table; Zustand; Axios |
+| Seguridad | JWT en cookie HttpOnly, bcrypt, roles          | React Router 7 con rutas protegidas por rol  |
 
 ## Requisitos
 
@@ -99,18 +99,18 @@ La aplicación queda en `http://localhost:5173`. Para verificar los tipos y gene
 
 ### Backend (`backend/.env`)
 
-| Variable | Descripción | Ejemplo |
-|---|---|---|
-| `DATABASE_URL` | Conexión a la base de datos | `postgresql+psycopg2://postgres:TU_PASSWORD@localhost:5432/foodstore_db` (desarrollo: `sqlite:///./foodstore.db`) |
-| `SECRET_KEY` | Firma del JWT, mínimo 32 caracteres | `cambiar-esta-clave-de-al-menos-32-caracteres` |
-| `ALGORITHM` | Algoritmo del JWT | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Expiración del token y de la cookie | `30` |
-| `FRONTEND_ORIGIN` | Origen permitido en CORS | `http://localhost:5173` |
+| Variable                      | Descripción                         | Ejemplo                                                                                                           |
+| ----------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                | Conexión a la base de datos         | `postgresql+psycopg2://postgres:TU_PASSWORD@localhost:5432/foodstore_db` (desarrollo: `sqlite:///./foodstore.db`) |
+| `SECRET_KEY`                  | Firma del JWT, mínimo 32 caracteres | `cambiar-esta-clave-de-al-menos-32-caracteres`                                                                    |
+| `ALGORITHM`                   | Algoritmo del JWT                   | `HS256`                                                                                                           |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Expiración del token y de la cookie | `30`                                                                                                              |
+| `FRONTEND_ORIGIN`             | Origen permitido en CORS            | `http://localhost:5173`                                                                                           |
 
 ### Frontend (`frontend/.env`)
 
-| Variable | Descripción | Ejemplo |
-|---|---|---|
+| Variable       | Descripción        | Ejemplo                        |
+| -------------- | ------------------ | ------------------------------ |
 | `VITE_API_URL` | URL base de la API | `http://localhost:8000/api/v1` |
 
 ## Usuario administrador (seed)
@@ -136,11 +136,11 @@ Los clientes (rol `user`) se crean desde la pantalla de registro.
 
 **Pedidos.** La creación es transaccional: valida cada producto (activo, disponible y con stock), descuenta el stock y copia `nombre_producto` y `precio_unitario` en cada línea, de modo que los precios no cambian después de creado el pedido. Si algo falla, no se persiste nada. Los pedidos no se borran: se cancelan, y la cancelación restituye el stock.
 
-| Estado | Transiciones válidas | Quién |
-|---|---|---|
-| `PENDIENTE` | `EN_PREPARACION`, `CANCELADO` | admin; el cliente dueño solo puede cancelar |
-| `EN_PREPARACION` | `ENTREGADO`, `CANCELADO` | admin |
-| `ENTREGADO`, `CANCELADO` | ninguna (estados terminales) | — |
+| Estado                   | Transiciones válidas          | Quién                                       |
+| ------------------------ | ----------------------------- | ------------------------------------------- |
+| `PENDIENTE`              | `EN_PREPARACION`, `CANCELADO` | admin; el cliente dueño solo puede cancelar |
+| `EN_PREPARACION`         | `ENTREGADO`, `CANCELADO`      | admin                                       |
+| `ENTREGADO`, `CANCELADO` | ninguna (estados terminales)  | —                                           |
 
 **Frontend.** Organizado por features (`pages`, `components`, `hooks`, `api`, `types`). TanStack Query gestiona el estado del servidor (catálogo, pedidos, usuarios, resumen) con invalidación tras cada mutación; Zustand gestiona el estado del cliente (sesión y carrito). Axios usa `withCredentials` y un interceptor que limpia la sesión ante un 401 o una cuenta desactivada, y `ProtectedRoute` redirige según sesión y rol.
 
@@ -148,10 +148,10 @@ Los clientes (rol `user`) se crean desde la pantalla de registro.
 
 Todos los endpoints están bajo `/api/v1` y documentados en `/docs` y `/redoc`.
 
-| Módulo | Ruta base | Acceso |
-|---|---|---|
-| Auth | `/auth` (`register`, `token`, `logout`, `me`) | Público / sesión |
-| Usuarios | `/admin/usuarios` (listar, `activar`, `desactivar`) | admin |
-| Categorías | `/categorias` | Lectura pública, escritura admin |
-| Productos | `/productos` (incluye `PATCH /{id}/stock`) | Lectura pública, escritura admin |
-| Pedidos | `/pedidos` (`resumen`, `/{id}/estado`, `/{id}/cancelar`) | Sesión, dueño o admin |
+| Módulo     | Ruta base                                                | Acceso                           |
+| ---------- | -------------------------------------------------------- | -------------------------------- |
+| Auth       | `/auth` (`register`, `token`, `logout`, `me`)            | Público / sesión                 |
+| Usuarios   | `/admin/usuarios` (listar, `activar`, `desactivar`)      | admin                            |
+| Categorías | `/categorias`                                            | Lectura pública, escritura admin |
+| Productos  | `/productos` (incluye `PATCH /{id}/stock`)               | Lectura pública, escritura admin |
+| Pedidos    | `/pedidos` (`resumen`, `/{id}/estado`, `/{id}/cancelar`) | Sesión, dueño o admin            |
