@@ -6,7 +6,7 @@ Los clientes se registran, recorren el catálogo, arman un carrito y confirman u
 
 - **Alumno:** Abel Tomás Romero
 - **Repositorio:** https://github.com/AtomuDev/TPI-ProgramacionIV-FoodStore
-- **Video de demostración:** 
+- **Video de demostración:** https://www.youtube.com/watch?v=3JIGuG5hQU4
 
 ## Tecnologías
 
